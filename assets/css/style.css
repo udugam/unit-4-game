@@ -1,0 +1,27 @@
+.character {
+    width:100px;
+    height:100px;
+    background-color: rgb(165, 192, 243);
+    margin: 10px;
+    float: left;
+}
+
+.selectedCharacter {
+    clear: both;
+}
+
+.enemySelection {
+    clear: both;
+}
+
+.enemy {
+    background-color: rgb(221, 62, 62)
+}
+
+.inBattle {
+    background-color: green
+}
+
+.defender {
+    clear: both;
+}
