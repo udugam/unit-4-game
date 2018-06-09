@@ -14,8 +14,32 @@
     clear: both;
 }
 
+.attack {
+    clear: both;
+}
+
+.player {
+    background-color: rgb(101, 135, 245);
+    margin: 10px;
+    float: left;
+    width:100px;
+    height:100px;
+}
+
 .enemy {
-    background-color: rgb(221, 62, 62)
+    background-color: rgb(221, 62, 62);
+    margin: 10px;
+    float: left;
+    width:100px;
+    height:100px;
+}
+
+.oponent {
+    background-color: rgb(99, 214, 76);
+    margin: 10px;
+    float: left;
+    width:100px;
+    height:100px;
 }
 
 .inBattle {
@@ -25,3 +49,4 @@
 .defender {
     clear: both;
 }
+
