@@ -18,7 +18,7 @@ $(document).ready(function () {
         charHealth.text(element.health);
         
         //Add data attributes to each character
-        charDiv.data("health",element.health);
+        charDiv.data("health", element.health);
         charDiv.data("attack", element.attack);
         charDiv.data("counterAttack", element.counterAttack);
 
@@ -56,28 +56,31 @@ $(document).ready(function () {
         $(".defender").append($(this));
     })
 
-    //on click of Attack button:
-    //1. subtract the player's attack from the oponent's health
-    //2. subtract the oponent's counterAttac from the oponent's health
-    //3. update new element data and text attributes
-    //4. execute checkWin() function 
+    
     $("button").on("click", function() {
         attack += $(".player").data("attack");
         var counterAttack = $(".oponent").data("counterAttack");
         var playerHealth = $(".player").data("health");
         var oponentHealth =  $(".oponent").data("health");
         
-        //1.
+        //1. subtract the player's attack from the oponent's health
         oponentHealth -= attack;
-        //2.
+        
+        //2. subtract the oponent's counterAttac from the oponent's health
         playerHealth -= counterAttack;
         
-        //3.
+        
+        //3. update new element data and text attributes. Render text statement of attacks.
         $(".player").data("health", playerHealth);
-        $(".player .health").text(playerHealth);       
+        $(".player .health").text(playerHealth);
+        $(".message").text("You attacked "+$(".oponent").text()+ "for " + attack + "damage!")   
+
         $(".oponent").data("health", oponentHealth);
         $(".oponent .health").text(oponentHealth);
-
+        $(".message").append($(".oponent").text() + "attacked you for " + counterAttack)  
+        
+        
+        //4. execute checkWin() function 
 
     })
     
