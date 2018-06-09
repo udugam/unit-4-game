@@ -5,16 +5,16 @@ $(document).ready(function () {
         { name: "Darth Sidious", picture: "../images/sidious.jpg", health: 150, attack: 12, counterAttack: 30 },
     ]
 
-    var attack=0;
+    var attack = 0;
 
     //create divs for each character in the array and add them to the page
     characters.forEach(function (element) {
-        var charDiv = $("<div>");
-        charDiv.addClass("character");
-        charDiv.text(element.name);
+        var charDiv = $("<div class='character'>");
 
-        var charHealth = $("<div>");
-        charHealth.addClass("health");
+        var charName = $("<div class='name'>");
+        charName.text(element.name);
+
+        var charHealth = $("<div class='health'>");
         charHealth.text(element.health);
         
         //Add data attributes to each character
@@ -22,7 +22,7 @@ $(document).ready(function () {
         charDiv.data("attack", element.attack);
         charDiv.data("counterAttack", element.counterAttack);
 
-        charDiv.append(charHealth);
+        charDiv.append(charName,charHealth);
 
         $(".characterSelection").append(charDiv);
     });
@@ -66,23 +66,32 @@ $(document).ready(function () {
         //1. subtract the player's attack from the oponent's health
         oponentHealth -= attack;
         
-        //2. subtract the oponent's counterAttac from the oponent's health
+        //2. subtract the oponent's counterAttack from the oponent's health
         playerHealth -= counterAttack;
         
         
         //3. update new element data and text attributes. Render text statement of attacks.
         $(".player").data("health", playerHealth);
         $(".player .health").text(playerHealth);
-        $(".message").text("You attacked "+$(".oponent").text()+ "for " + attack + "damage!")   
+        $(".message").text("You attacked "+$(".oponent .name").text()+ "for " + attack + " damage!")   
 
         $(".oponent").data("health", oponentHealth);
         $(".oponent .health").text(oponentHealth);
-        $(".message").append($(".oponent").text() + "attacked you for " + counterAttack)  
-        
+        $(".message").append($(".oponent .name").text() + " attacked you for " + counterAttack + "!")  
+
+        $(".attackMessage").text("You attacked "+$(".oponent .name").text()+ " for " + attack + " damage!") 
+        $(".counterAttackMessage").text($(".oponent .name").text() + " attacked you for " + counterAttack + " damage!")  
         
         //4. execute checkWin() function 
-
+        checkWin();
     })
+
+    //the checkWin function checks to see if the oponents health is 0 or less and removes the element from the DOM
+    function checkWin() {
+        if($(".oponent").data("health") <= 0){
+            $(".oponent").remove();        
+        }
+    }
     
 })
 
