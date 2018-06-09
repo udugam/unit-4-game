@@ -5,6 +5,8 @@ $(document).ready(function () {
         { name: "Darth Sidious", picture: "../images/sidious.jpg", health: 150, attack: 12, counterAttack: 30 },
     ]
 
+    var attack=0;
+
     //create divs for each character in the array and add them to the page
     characters.forEach(function (element) {
         var charDiv = $("<div>");
@@ -57,23 +59,26 @@ $(document).ready(function () {
     //on click of Attack button:
     //1. subtract the player's attack from the oponent's health
     //2. subtract the oponent's counterAttac from the oponent's health
-    //3. execute checkWin() function 
+    //3. update new element data and text attributes
+    //4. execute checkWin() function 
     $("button").on("click", function() {
-        var attack = $(".player").data("attack");
+        attack += $(".player").data("attack");
         var counterAttack = $(".oponent").data("counterAttack");
         var playerHealth = $(".player").data("health");
         var oponentHealth =  $(".oponent").data("health");
         
         //1.
         oponentHealth -= attack;
+        //2.
         playerHealth -= counterAttack;
         
+        //3.
         $(".player").data("health", playerHealth);
-        $(".player .health").text(playerHealth);
-        
-        
+        $(".player .health").text(playerHealth);       
         $(".oponent").data("health", oponentHealth);
         $(".oponent .health").text(oponentHealth);
+
+
     })
     
 })
