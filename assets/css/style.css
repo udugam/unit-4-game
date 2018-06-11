@@ -1,9 +1,33 @@
 .character {
-    width:100px;
-    height:100px;
     background-color: rgb(165, 192, 243);
     margin: 10px;
     float: left;
+    text-align: center;
+}
+
+.picture {
+    height:100px;
+}
+
+.player {
+    background-color: rgb(101, 135, 245);
+    margin: 10px;
+    float: left;
+    text-align: center;
+}
+
+.enemy {
+    background-color: rgb(221, 62, 62);
+    margin: 10px;
+    float: left;
+    text-align: center;
+}
+
+.oponent {
+    background-color: rgb(99, 214, 76);
+    margin: 10px;
+    float: left;
+    text-align: center;
 }
 
 .selectedCharacter {
@@ -16,34 +40,6 @@
 
 .attack {
     clear: both;
-}
-
-.player {
-    background-color: rgb(101, 135, 245);
-    margin: 10px;
-    float: left;
-    width:100px;
-    height:100px;
-}
-
-.enemy {
-    background-color: rgb(221, 62, 62);
-    margin: 10px;
-    float: left;
-    width:100px;
-    height:100px;
-}
-
-.oponent {
-    background-color: rgb(99, 214, 76);
-    margin: 10px;
-    float: left;
-    width:100px;
-    height:100px;
-}
-
-.inBattle {
-    background-color: green
 }
 
 .defender {
