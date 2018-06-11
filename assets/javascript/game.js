@@ -32,12 +32,12 @@ $(document).ready(function () {
         
     })
     
-    //on enemy click, the character is moved into the defender div
+    //on enemy click, the character is moved into the selectedOponent div
     $("body").on("click", ".enemy", function() {
         $(this).detach();
         $(this).removeClass("enemy player")
         $(this).addClass("oponent");
-        $(".defender").append($(this));
+        $(".selectedOponent").append($(this));
     })
 
     
