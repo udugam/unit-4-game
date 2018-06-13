@@ -1,12 +1,13 @@
 $(document).ready(function () {
     //Play star wars theme song. Attach embeded souncloud player for sound, with height of 0
-    $("body").append('<iframe width="100%" height="0" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/238415805&color=%23f4f2f2&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>');
+    var synth = window.speechSynthesis;
+    $("body").append('<iframe width="100%" height="1" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/238415805&color=%23f4f2f2&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>');
 
     var characters = [
-        { name: "Obi-Wan Kenobi", picture: "./assets/images/obi-wan.jpg", health: 120, attack: 10, counterAttack: 20 },
-        { name: "Luke Skywalker", picture: "./assets/images/skywalker.jpg", health: 100, attack: 6, counterAttack: 15 },
-        { name: "Darth Vader", picture: "./assets/images/vader.jpg", health: 150, attack: 12, counterAttack: 30 },
-        { name: "Storm Trooper", picture: "./assets/images/storm-trooper.jpg", health: 100, attack: 5, counterAttack: 10 }
+        { name: "Obi-Wan Kenobi", picture: "./assets/images/obi-wan.jpg", health: 120, attack: 10, counterAttack: 20, speech: new SpeechSynthesisUtterance('Obi Wan Kenobi') },
+        { name: "Luke Skywalker", picture: "./assets/images/skywalker.jpg", health: 100, attack: 6, counterAttack: 15, speech: new SpeechSynthesisUtterance('Luke Skywalker') },
+        { name: "Darth Vader", picture: "./assets/images/vader.jpg", health: 150, attack: 12, counterAttack: 30, speech: new SpeechSynthesisUtterance('Darth Vader') },
+        { name: "Storm Trooper", picture: "./assets/images/storm-trooper.jpg", health: 100, attack: 5, counterAttack: 10, speech: new SpeechSynthesisUtterance('Storm Trooper') },
     ]
 
     //Global attack variable to keep track of increasing attack damage for each game
@@ -21,6 +22,7 @@ $(document).ready(function () {
     //div while the remaining characters are moved to the enemySelection div
     $("body").on("click", ".character", function () {
         var char = $(this);
+        synth.speak(char.data("nameAudio"));
         char.detach();
         char.removeClass("character");
         char.addClass("player");
@@ -41,6 +43,7 @@ $(document).ready(function () {
     //on enemy click, the character is moved into the selectedOponent div
     $("body").on("click", ".enemy", function() {
         if(!oponent) {
+            synth.speak($(this).data("nameAudio"));
             $(this).detach();
             $(this).removeClass("enemy player")
             $(this).addClass("oponent");
@@ -122,6 +125,7 @@ $(document).ready(function () {
             charDiv.data("health", element.health);
             charDiv.data("attack", element.attack);
             charDiv.data("counterAttack", element.counterAttack);
+            charDiv.data("nameAudio", element.speech);
     
             charDiv.append(charName,charPic,charHealth);
     
