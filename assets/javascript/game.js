@@ -14,9 +14,18 @@ $(document).ready(function () {
     var attack = 0;
     var oponent = false;
     var alive = false;
+    var gameStarted = false;
     
     //launches starGame function that creates and displays divs for each character
-    startGame();
+    $("body").on("click", function() {
+        if (!gameStarted) {
+            gameStarted = true;
+            $(".startGameMessage").remove();
+            renderPageStructure();
+            startGame();
+        }  
+    })
+    
     
     //on click of a character, the character is moved to the selectedCharacter 
     //div while the remaining characters are moved to the enemySelection div
@@ -53,7 +62,7 @@ $(document).ready(function () {
     })
 
     
-    $("button#attackBtn").on("click", function() {
+    $("body").on("click", "button#attackBtn", function() {
         if (oponent && alive) {
             attack += $(".player").data("attack");
             var counterAttack = $(".oponent").data("counterAttack");
@@ -156,6 +165,16 @@ $(document).ready(function () {
         var voices = synth.getVoices()
         utterance.voice = voices[49];
         synth.speak(utterance);
+    }
+
+    function renderPageStructure() {
+        var characterSelection = $(' <div class="characterSelection"></div>');
+        var selectedCharacter = $('<div class="selectedCharacter"><h2>Your Character</h2></div>');
+        var enemySelection = $('<div class="enemySelection"><h2>Enemies Available to Attack</h2></div>');
+        var attack = $('<div class="attack"><button id="attackBtn">Attack</button></div>');
+        var selectedOponent = $('<div class="selectedOponent"><h2>Oponent</h2></div>');
+        var messages = $('<div class="messages"><div class="attackMessage"></div><div class="counterAttackMessage"></div><div class="matchResult"></div></div>');
+        $("body").append(characterSelection,selectedCharacter,enemySelection,attack,selectedOponent,messages);
     }
 })
 
