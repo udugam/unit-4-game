@@ -22,7 +22,7 @@ $(document).ready(function () {
     //div while the remaining characters are moved to the enemySelection div
     $("body").on("click", ".character", function () {
         var char = $(this);
-        synth.speak(char.data("nameAudio"));
+        sayName(char.data("nameAudio"));
         char.detach();
         char.removeClass("character");
         char.addClass("player");
@@ -43,7 +43,7 @@ $(document).ready(function () {
     //on enemy click, the character is moved into the selectedOponent div
     $("body").on("click", ".enemy", function() {
         if(!oponent) {
-            synth.speak($(this).data("nameAudio"));
+            sayName($(this).data("nameAudio"));
             $(this).detach();
             $(this).removeClass("enemy player")
             $(this).addClass("oponent");
@@ -151,6 +151,11 @@ $(document).ready(function () {
             $(".matchResult").text("");
         }
     }
-    
+
+    function sayName(utterance) {
+        var voices = synth.getVoices()
+        utterance.voice = voices[49];
+        synth.speak(utterance);
+    }
 })
 
