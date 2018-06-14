@@ -1,7 +1,7 @@
 $(document).ready(function () {
     //Play star wars theme song. Attach embeded souncloud player for sound, with height of 0
     var synth = window.speechSynthesis;
-    $("body").append('<iframe width="100%" height="1" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/238415805&color=%23f4f2f2&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>');
+    $("body").append('<iframe width="100%" height="1" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/130680658&color=%23f4f2f2&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>');
 
     var characters = [
         { name: "Obi-Wan Kenobi", picture: "./assets/images/obi-wan.jpg", health: 120, attack: 10, counterAttack: 20, speech: new SpeechSynthesisUtterance('Obi Wan Kenobi') },
@@ -20,9 +20,14 @@ $(document).ready(function () {
     $("body").on("click", function() {
         if (!gameStarted) {
             gameStarted = true;
-            $(".startGameMessage").remove();
-            renderPageStructure();
-            startGame();
+            $("#startGameMessage").animate({
+                opacity:0,
+            },2000, function() {
+                $(this).remove()
+                renderPageStructure();
+                startGame();
+            });
+            
         }  
     })
     
@@ -138,7 +143,11 @@ $(document).ready(function () {
     
             charDiv.append(charName,charPic,charHealth);
     
-            $(".characterSelection").append(charDiv);
+            $(".characterSelection").animate({
+                opacity: 1,
+            }, 500, function() {
+                $(this).append(charDiv);
+            })
         });
     }
 
