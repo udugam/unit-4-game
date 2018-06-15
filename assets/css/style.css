@@ -6,7 +6,8 @@
 }
 
 .picture {
-    height:100px;
+    width:100px;
+    height:135px;
 }
 
 .player {
@@ -23,7 +24,7 @@
     text-align: center;
 }
 
-.oponent {
+.opponent {
     background-color: rgb(99, 214, 76);
     margin: 10px;
     float: left;
@@ -32,22 +33,33 @@
 
 .selectedCharacter {
     clear: both;
+    margin-left:30%;
 }
 
 .enemySelection {
-    clear: both;
+    float: right;
+    margin-right: 30%;
 }
 
 .attack {
     clear: both;
+    margin-left:30%;
 }
 
-.selectedOponent {
+#attackBtn {
+    width:100px;
+    height:30px;
+}
+
+.selectedopponent {
     clear: both;
+    margin-left: 30%;
 }
 
 .messages {
     clear: both;
+    float:right;
+    margin-right:30%;
 }
 
 #background-video {
@@ -73,3 +85,11 @@ body {
     color: white;
 }
 
+.characterSelection {
+    width: 500px;
+    margin: auto;
+}
+
+.announcement {
+    text-align: center;
+}

@@ -7,22 +7,21 @@ $(document).ready(function () {
         { name: "Obi-Wan Kenobi", picture: "./assets/images/obi-wan.jpg", health: 120, attack: 10, counterAttack: 20, speech: new SpeechSynthesisUtterance('Obi Wan Kenobi') },
         { name: "Luke Skywalker", picture: "./assets/images/skywalker.jpg", health: 100, attack: 6, counterAttack: 15, speech: new SpeechSynthesisUtterance('Luke Skywalker') },
         { name: "Darth Vader", picture: "./assets/images/vader.jpg", health: 150, attack: 12, counterAttack: 30, speech: new SpeechSynthesisUtterance('Darth Vader') },
-        { name: "Storm Trooper", picture: "./assets/images/storm-trooper.jpg", health: 100, attack: 5, counterAttack: 10, speech: new SpeechSynthesisUtterance('Storm Trooper') },
+        { name: "Storm Trooper", picture: "./assets/images/storm-trooper.jpg", health: 100, attack: 5, counterAttack: 5, speech: new SpeechSynthesisUtterance('Storm Trooper') },
     ]
 
     //Global attack variable to keep track of increasing attack damage for each game
     var attack = 0;
-    var oponent = false;
+    var opponent = false;
     var alive = false;
     var gameStarted = false;
+    var opponents = characters.length-1;
     
     //launches starGame function that creates and displays divs for each character
     $("body").on("click", function() {
         if (!gameStarted) {
             gameStarted = true;
-            $("#startGameMessage").animate({
-                opacity:0,
-            },2000, function() {
+            $("#startGameMessage").fadeOut(1000, function() {
                 $(this).remove()
                 renderPageStructure();
                 startGame();
@@ -36,7 +35,7 @@ $(document).ready(function () {
     //div while the remaining characters are moved to the enemySelection div
     $("body").on("click", ".character", function () {
         var char = $(this);
-        sayName(char.data("nameAudio"));
+        sayText(char.data("nameAudio"));
         char.detach();
         char.removeClass("character");
         char.addClass("player");
@@ -47,54 +46,63 @@ $(document).ready(function () {
                 $(element).detach();
                 $(element).removeClass("character")
                 $(element).addClass("enemy")
-                $(".enemySelection").append($(element));
+                $(".characterSelection").fadeOut(1500);
+                $(".selectedCharacter").fadeIn(1500);
+                $(".messages").fadeIn(1500);
+                $(".enemySelection").fadeIn(1500).append($(element));
             } 
         })
-        
-        
+        $(".announcement").fadeOut(750, function() {
+            $(this).html('<h1>Choose an Enemy to Attack<h1>').fadeIn(1500);
+            sayText(new SpeechSynthesisUtterance('choose an enemy to attack'));
+        })
     })
     
-    //on enemy click, the character is moved into the selectedOponent div
+    //on enemy click, the character is moved into the selectedopponent div
     $("body").on("click", ".enemy", function() {
-        if(!oponent) {
-            sayName($(this).data("nameAudio"));
+        if(!opponent) {
+            sayText($(this).data("nameAudio"));
             $(this).detach();
             $(this).removeClass("enemy player")
-            $(this).addClass("oponent");
-            $(".selectedOponent").append($(this));
-            oponent = true;
+            $(this).addClass("opponent");
+            $(".attack").fadeIn(1500);
+            $(".selectedopponent").fadeIn(1500).append($(this));
+            sayText(new SpeechSynthesisUtterance('press the attack button to start your battle'));
+            opponent = true;
         }
     })
 
     
     $("body").on("click", "button#attackBtn", function() {
-        if (oponent && alive) {
+        if (opponent && alive) {
             attack += $(".player").data("attack");
-            var counterAttack = $(".oponent").data("counterAttack");
+            var counterAttack = $(".opponent").data("counterAttack");
             var playerHealth = $(".player").data("health");
-            var oponentHealth =  $(".oponent").data("health");
+            var opponentHealth =  $(".opponent").data("health");
             
-            //1. subtract the player's attack from the oponent's health
-            oponentHealth -= attack;
+            //1. subtract the player's attack from the opponent's health
+            opponentHealth -= attack;
             
-            //2. subtract the oponent's counterAttack from the oponent's health
+            //2. subtract the opponent's counterAttack from the opponent's health
             playerHealth -= counterAttack;
             
             //3. update new element data and text attributes. Render text statement of attacks.
             $(".player").data("health", playerHealth);
             $(".player .health").text(playerHealth);
-            $(".message").text("You attacked "+$(".oponent .name").text()+ "for " + attack + " damage!")   
+            $(".message").text("You attacked "+$(".opponent .name").text()+ "for " + attack + " damage!")   
     
-            $(".oponent").data("health", oponentHealth);
-            $(".oponent .health").text(oponentHealth);
-            $(".message").append($(".oponent .name").text() + " attacked you for " + counterAttack + "!")  
+            $(".opponent").data("health", opponentHealth);
+            $(".opponent .health").text(opponentHealth);
+            $(".message").append($(".opponent .name").text() + " attacked you for " + counterAttack + "!")  
     
-            $(".attackMessage").text("You attacked "+$(".oponent .name").text()+ " for " + attack + " damage!") 
-            $(".counterAttackMessage").text($(".oponent .name").text() + " attacked you for " + counterAttack + " damage!")  
+            $(".attackMessage").text("You attacked "+$(".opponent .name").text()+ " for " + attack + " damage!")
+            sayText(new SpeechSynthesisUtterance(attack+'damage'));
+            sayText(new SpeechSynthesisUtterance(playerHealth+'health left')); 
+            $(".counterAttackMessage").text($(".opponent .name").text() + " attacked you for " + counterAttack + " damage!")  
             
             //4. execute checkWin() function 
             checkWin();
-        } else if (!oponent && alive) {
+        } else if (!opponent && alive) {
             $(".attackMessage").text(""); 
             $(".counterAttackMessage").text(""); 
             $(".matchResult").text("Select an enemy first to attack!"); 
@@ -102,6 +110,7 @@ $(document).ready(function () {
             $(".attackMessage").text(""); 
             $(".counterAttackMessage").text(""); 
             $(".matchResult").text("Click New Game to Play Again!");
+            
         }
     })
 
@@ -111,8 +120,9 @@ $(document).ready(function () {
         $(".matchResult").text("");
         $(".player").remove();
         $(".enemy").remove();
-        $(".oponent").remove();
-        oponent = false;
+        $(".opponent").remove();
+        initHtmlStructure()
+        opponent = false;
         alive = true;
         startGame();
     })
@@ -122,12 +132,12 @@ $(document).ready(function () {
 
     function startGame() {
         //create divs for each character in the array and add them to the page
+        opponents = characters.length-1;
         characters.forEach(function (element) {
             var charDiv = $("<div class='character'>");
     
             var charPic = $("<img class='picture'>");
-            charPic.attr("src", element.picture);
-            charPic.attr("alt", element.name);
+            charPic.attr("src", element.picture).attr("alt", element.name);
     
             var charName = $("<div class='name'>");
             charName.text(element.name);
@@ -136,54 +146,75 @@ $(document).ready(function () {
             charHealth.text(element.health);
             
             //Add data attributes to each character
-            charDiv.data("health", element.health);
-            charDiv.data("attack", element.attack);
-            charDiv.data("counterAttack", element.counterAttack);
-            charDiv.data("nameAudio", element.speech);
-    
+            charDiv.data("health", element.health).data("attack", element.attack).data("counterAttack", element.counterAttack).data("nameAudio", element.speech);
+            
+            //Append Name, Picture, & Health display divs
             charDiv.append(charName,charPic,charHealth);
-    
-            $(".characterSelection").animate({
-                opacity: 1,
-            }, 500, function() {
-                $(this).append(charDiv);
-            })
+
+            //Add completed character div to the character Selection div
+            $(".characterSelection").append(charDiv);     
         });
+        $(".announcement").html('<h1>Choose Your Character</h1>').fadeIn(1500);
+        $(".characterSelection").fadeIn(1500);
+        sayText(new SpeechSynthesisUtterance('choose your character'));
     }
 
-    //the checkWin function checks to see if the oponent or player's health is 0 or less and removes the element from the DOM
+    //the checkWin function checks to see if the opponent or player's health is 0 or less and removes the element from the DOM
     function checkWin() {
         if ($(".player").data("health") <= 0) {
             $(".matchResult").text("You've been defeated...GAME OVER!");
+            sayText(new SpeechSynthesisUtterance("you've been defeated, click new game to try again"));
             $(".attackMessage").text(""); 
             $(".counterAttackMessage").text("");
             $(".messages").append("<button id='newGameBtn'>New Game</button>")
             alive = false;
-        } else if($(".oponent").data("health") <= 0){
-            $(".matchResult").text("You have defeated " + $(".oponent .name").text() + ", choose another enemy.");
-            $(".attackMessage").text(""); 
-            $(".counterAttackMessage").text("");     
-            $(".oponent").remove();
-            oponent = false;
+        } else if($(".opponent").data("health") <= 0){
+            opponents--;
+            if (opponents <= 0) {
+                $(".matchResult").text("You Have Defeated All Enemies! Click New Game to Play Again");
+                sayText(new SpeechSynthesisUtterance("winner! you are the ultimate champion"));
+                $(".attackMessage").text(""); 
+                $(".counterAttackMessage").text("");   
+                $(".messages").append("<button id='newGameBtn'>New Game</button>")
+            } else {
+                $(".matchResult").text("You have defeated " + $(".opponent .name").text() + ", choose another enemy.");
+                sayText(new SpeechSynthesisUtterance("you have defeated"+$(".opponent .name").text()+".choose another enemy to attack"));
+                $(".attackMessage").text(""); 
+                $(".counterAttackMessage").text("");     
+                $(".opponent").remove();
+                opponent = false;
+            }
         } else {
             $(".matchResult").text("");
         }
     }
 
-    function sayName(utterance) {
+    function sayText(utterance) {
         var voices = synth.getVoices()
         utterance.voice = voices[49];
-        synth.speak(utterance);
+        synth.speak(utterance); 
     }
 
     function renderPageStructure() {
+        var announcement = $('<div class="announcement"></div>')
         var characterSelection = $(' <div class="characterSelection"></div>');
         var selectedCharacter = $('<div class="selectedCharacter"><h2>Your Character</h2></div>');
         var enemySelection = $('<div class="enemySelection"><h2>Enemies Available to Attack</h2></div>');
         var attack = $('<div class="attack"><button id="attackBtn">Attack</button></div>');
-        var selectedOponent = $('<div class="selectedOponent"><h2>Oponent</h2></div>');
+        var selectedopponent = $('<div class="selectedopponent"><h2>Opponent</h2></div>');
         var messages = $('<div class="messages"><div class="attackMessage"></div><div class="counterAttackMessage"></div><div class="matchResult"></div></div>');
-        $("body").append(characterSelection,selectedCharacter,enemySelection,attack,selectedOponent,messages);
+        $("body").append(announcement,characterSelection,selectedCharacter,enemySelection,attack,selectedopponent,messages);
+        initHtmlStructure();
+    }
+
+    function initHtmlStructure() {
+        $(".announcement").fadeOut(0);
+        $(".characterSelection").fadeOut(0);
+        $(".selectedCharacter").fadeOut(0);
+        $(".enemySelection").fadeOut(0);
+        $(".attack").fadeOut(0);
+        $(".selectedopponent").fadeOut(0);
+        $(".messages").fadeOut(0);
     }
 })
 
